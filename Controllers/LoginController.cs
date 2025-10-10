@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using backend.Models;
 using backend.DTOs;
 using backend.Repositories;
-using Microsoft.VisualBasic;
-using Microsoft.AspNetCore.Http.HttpResults;
-using ApiACEAPP.Services;
-using Microsoft.AspNetCore.Authorization;
+using backend.Services;
 
 namespace backend.Controllers;
 
@@ -13,14 +9,36 @@ namespace backend.Controllers;
 [Route("[controller]")]
 public class LoginController : ControllerBase{
 
-    private readonly UsuarioRepository _usuarioRepository;
     private readonly AuthService _authService;
 
-    public LoginController(UsuarioRepository usuarioRepository, AuthService authService) {
-        _usuarioRepository = usuarioRepository;
+    public LoginController(AuthService authService)
+    {
         _authService = authService;
     }
 
+    /// <summary>
+    /// Inicia sesión de usuario y devuelve un token JWT.
+    /// </summary>
+    /// <param name="usuarioDTO">Nombre de usuario y contraseña.</param>
+    /// <returns>Token JWT si las credenciales son válidas.</returns>
+    /// <response code="200">Login exitoso.</response>
+    /// <response code="401">Credenciales inválidas.</response>
+    /// <response code="500">Error del sistema.</response> 
+    /// <remarks>
+    /// Ejemplo de request:
+    /// 
+    ///     POST /Login
+    ///     {
+    ///        "nombre": "walter.bates",
+    ///        "contraseña": "bpm"
+    ///     }
+    ///
+    /// Ejemplo de response:
+    ///
+    ///     {
+    ///        "token": "eyJhbGciOiJIUzI1NiIsInR..."
+    ///     }
+    /// </remarks>
     [HttpPost]
     public async Task<IActionResult> Login(UsuarioDTO usuarioDTO)
     {
@@ -33,7 +51,7 @@ public class LoginController : ControllerBase{
             else
                 return Ok(token);
         }
-        catch (Exception ex)
+        catch
         {
             return StatusCode(500, "Falló el login");
         }

@@ -1,5 +1,5 @@
 using System.Reflection;
-using ApiACEAPP.Services;
+using backend.Services;
 using backend.Data;
 using backend.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +50,7 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1",
     });
 
-    // Genera el archivo XML para poder documentar el Swagger
+    // Genera el archivo XML para poder documentar el Swagger, y admite las anotaciones
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });

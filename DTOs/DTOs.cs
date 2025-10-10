@@ -1,8 +1,5 @@
 using System.Net;
 using backend.Models;
-using System.ComponentModel.DataAnnotations;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Serialization;
 
 namespace backend.DTOs;
 
@@ -28,13 +25,13 @@ public class CrearColaboracionDTO
     /// </summary>
     public required CategoriaColaboracion CategoriaColaboracion { get; set; }
     /// <summary>
-    /// Id de la organización a la que pertenece la colaboración.
-    /// </summary>
-    public required Guid OrganizacioId { get; set; } //de la que forma parte
-    /// <summary>
     /// Id de la etapa a la que pertenece la colaboración.
     /// </summary>
     public required Guid EtapaId { get; set; } //de la que forma parte
+    /// <summary>
+    /// Id de la organización a la que pertenece la colaboración.
+    /// </summary>
+    public required Guid OrganizacioId { get; set; } //de la que forma parte
 }
 public class ActualizarColaboracionDTO
 {
