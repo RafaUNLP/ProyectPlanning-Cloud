@@ -1,0 +1,57 @@
+# ========================
+# Archivos y carpetas comunes
+# ========================
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Archivos temporales y cache de compiladores
+*.local
+.vite/
+.DS_Store
+
+# ========================
+# BACKEND (.NET)
+# ========================
+
+# Artefactos de compilación
+bin/
+obj/
+**/out/
+
+# Archivos de configuración local y secretos
+appsettings.Development.json
+
+# Migraciones
+Migrations
+
+# ========================
+# Archivos de IDEs y editores
+# ========================
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ========================
+# Archivos de publicación y cache
+# ========================
+
+*.user
+*.userosscache
+*.sln.docstates
+
+/node_modules
+
+
