@@ -1,4 +1,9 @@
-Notas del backend:
+Notas actuales:
+
+    Para correr la aplicación basta con hacer un 'docker compose up -d', dado que se incorporó el Dockerfile que se encarga de publicar la app.
+    El docker-compose.yml se encarga de levantar el contenedor de postgres y luego el de la API (que utiliza  el Dockerfile).
+
+Notas del backend previas a dockerizar todo:
 
 - Para levantar la BD por primera vez, se debe utilizar Dcker y Entity Framework:
     0 - En la carpeta general del proyecto, levantar el docker con:
