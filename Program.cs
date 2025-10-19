@@ -9,7 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -85,7 +84,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 //Conexión a la BD
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DATABASE_URL")));
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+//Si no hay conexión del appsettings, probamos con DATABASE_URL (Render)
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    connectionString = databaseUrl;// Tiene que tener el formato esperado: Host=;Port=;Database=;Username=;Password=
+}
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 //Configurar JSON con case-insensitive
 builder.Services.AddControllersWithViews()
@@ -102,12 +113,23 @@ builder.Services.AddScoped<UsuarioRepository>();
 //Añado los servicios
 builder.Services.AddScoped<AuthService>();
 
-
 var app = builder.Build();
 
 //Añade Swagger siempre
 app.UseSwagger();
 app.UseSwaggerUI();
+
+//Hace que siempre se vaya al Swagger al correrlo
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+
+    await next();
+});
 
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
