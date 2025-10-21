@@ -32,7 +32,7 @@ public class UsuarioController : ControllerBase{
     /// <remarks>
     /// Ejemplo de request:
     /// 
-    ///     POST /Login
+    ///     POST /Usuario
     ///     {
     ///        "nombre": "walter.bates",
     ///        "contraseña": "bpm"
@@ -81,7 +81,7 @@ public class UsuarioController : ControllerBase{
     /// <remarks>
     /// Ejemplo de request:
     /// 
-    ///     GET /Login/walter.bates
+    ///     GET /Usuario/walter.bates
     ///
     /// Ejemplo de response:
     ///

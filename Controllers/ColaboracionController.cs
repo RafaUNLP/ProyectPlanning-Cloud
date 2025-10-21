@@ -173,4 +173,47 @@ public class ColaboracionController : ControllerBase
             return StatusCode(500, "Falló la recuperación de la colaboración");
         }
     }
+
+    /// <summary>
+    /// Recupera todas las colaboraciones asociadas a un proyecto/etapa.
+    /// </summary>
+    /// <param name="etapaId">Id de la etapa del proyecto.</param>
+    /// <returns>Una lista de colaboraciones.</returns>
+    /// <response code="200">Recuperación exitosa.</response>
+    /// <response code="500">Error del sistema.</response> 
+    /// <remarks>
+    /// Ejemplo de request:
+    /// 
+    ///     GET /Colaboracion/proyecto/3fa85f64-5717-4562-b3fc-2c963f66afa6
+    ///
+    /// Ejemplo de response:
+    ///
+    ///     [
+    ///       {
+    ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
+    ///         "descripcion": "Cabar el pozo para la pileta",
+    ///         "categoriaColaboracion": 2,
+    ///         "organizacioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionComprometidaId": null,
+    ///         "fechaRealizacion": null
+    ///       }
+    ///     ]
+    /// </remarks>
+    [HttpGet("proyecto/{etapaId}")]
+    public async Task<IActionResult> RecuperarColaboracionesConProyectoID(Guid etapaId)
+    {
+        try
+        {
+            // Se utiliza el método FilterAsync para buscar todas las colaboraciones que coincidan con EtapaId
+            IEnumerable<Colaboracion> buscadas = await _colaboracionRepository.FilterAsync(c => c.EtapaId == etapaId);
+
+            // Devuelve la lista (estará vacía si no se encuentra ninguna)
+            return Ok(buscadas);
+        }
+        catch
+        {
+            return StatusCode(500, "Falló la recuperación de las colaboraciones");
+        }
+    }
 }

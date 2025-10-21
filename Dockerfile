@@ -1,19 +1,17 @@
-# Etapa de build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+# Base image
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-COPY *.csproj ./
-RUN dotnet restore
+COPY backend.csproj ./
+RUN dotnet restore backend.csproj
 
 COPY . ./
-RUN dotnet publish -c Release -o /app/out
+RUN dotnet publish backend.csproj -c Release -o out
 
-# Etapa final
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final-env
 WORKDIR /app
-COPY --from=build /app/out .
 
-# Render usa el puerto de entorno
-ENV ASPNETCORE_URLS=http://+:${PORT:-8080}
-
-ENTRYPOINT ["dotnet", "backend.dll"]
+COPY --from=build-env /app/out .
+ENTRYPOINT [ "dotnet", "backend.dll" ]
