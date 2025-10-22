@@ -43,7 +43,7 @@ public class AuthService
             new Claim(ClaimTypes.NameIdentifier, nombreUsuario)
         };
 
-        DateTime fechaExpiracion = DateTime.Now.AddSeconds(180); //3hs de duración
+        DateTime fechaExpiracion = DateTime.Now.AddHours(3); //3hs de duración
 
         var secToken = new JwtSecurityToken(
             issuer: issuer,
