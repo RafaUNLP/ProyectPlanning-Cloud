@@ -25,7 +25,7 @@ public class ColaboracionController : ControllerBase
     /// <param name="colaboracionDTO">Descripción, categoría numética, Id de la etapa a la que pertenece, Id de la organización a la que pertenece</param>
     /// <returns>La colaboración creada.</returns>
     /// <response code="200">Creación exitosa.</response>
-    /// <response code="409">Ya existiía una colaboración para esa etapa y esa organización.</response>
+    /// <response code="409">Ya existía una colaboración para esa etapa y esa organización.</response>
     /// <response code="500">Error del sistema.</response> 
     /// <remarks>
     /// Ejemplo de request:
@@ -34,7 +34,8 @@ public class ColaboracionController : ControllerBase
     ///     {
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
-    ///         "organizacioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
     ///      }
     ///
@@ -44,7 +45,8 @@ public class ColaboracionController : ControllerBase
     ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
-    ///         "organizacioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
     ///         "fechaRealizacion": "null
@@ -55,7 +57,7 @@ public class ColaboracionController : ControllerBase
     {
         try
         {
-            bool yaExiste = await _colaboracionRepository.Exist(c => c.EtapaId == colaboracionDTO.EtapaId && c.OrganizacioId == colaboracionDTO.OrganizacioId);
+            bool yaExiste = await _colaboracionRepository.Exist(c => c.EtapaId == colaboracionDTO.EtapaId && c.OrganizacionId == colaboracionDTO.OrganizacionId);
 
             if (yaExiste)
                 return Conflict("La colaboración para esa organización y etapa ya se encuentra cargada");
@@ -65,7 +67,8 @@ public class ColaboracionController : ControllerBase
                 Id = Guid.NewGuid(),
                 Descripcion = colaboracionDTO.Descripcion,
                 CategoriaColaboracion = colaboracionDTO.CategoriaColaboracion,
-                OrganizacioId = colaboracionDTO.OrganizacioId,
+                OrganizacionId = colaboracionDTO.OrganizacionId,
+                ProyectoId = colaboracionDTO.ProyectoId,
                 EtapaId = colaboracionDTO.EtapaId
             });
 
@@ -95,7 +98,8 @@ public class ColaboracionController : ControllerBase
     ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
-    ///         "organizacioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
     ///         "fechaRealizacion": null
@@ -121,7 +125,7 @@ public class ColaboracionController : ControllerBase
     }
 
     /// <summary>
-    /// Actualizar parte de una colaboración.
+    /// Actualizar parte de una colaboración para marcarla como realizada o asignarle una organización comprometida.
     /// </summary>
     /// <param name="id">Id de lacolaboración .</param>
     /// <param name="actualizarColaboracionDTO">Id de la organización que desea comprometerse con ella, indicador de si se desea marcar la colaboración como realizada</param>
@@ -140,7 +144,8 @@ public class ColaboracionController : ControllerBase
     ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
-    ///         "organizacioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "fechaRealizacion": "2025-10-10T13:27:27.240306"
@@ -175,7 +180,7 @@ public class ColaboracionController : ControllerBase
     }
 
     /// <summary>
-    /// Recupera todas las colaboraciones asociadas a un proyecto/etapa.
+    /// Recupera todas las colaboraciones asociadas a un proyecto.
     /// </summary>
     /// <param name="etapaId">Id de la etapa del proyecto.</param>
     /// <returns>Una lista de colaboraciones.</returns>
@@ -193,20 +198,21 @@ public class ColaboracionController : ControllerBase
     ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
-    ///         "organizacioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
     ///         "fechaRealizacion": null
     ///       }
     ///     ]
     /// </remarks>
-    [HttpGet("proyecto/{etapaId}")]
-    public async Task<IActionResult> RecuperarColaboracionesConProyectoID(Guid etapaId)
+    [HttpGet("p{proyectoId}")]
+    public async Task<IActionResult> RecuperarColaboracionesConProyectoID(Guid proyectoId)
     {
         try
         {
             // Se utiliza el método FilterAsync para buscar todas las colaboraciones que coincidan con EtapaId
-            IEnumerable<Colaboracion> buscadas = await _colaboracionRepository.FilterAsync(c => c.EtapaId == etapaId);
+            IEnumerable<Colaboracion> buscadas = await _colaboracionRepository.FilterAsync(c => c.ProyectoId == proyectoId);
 
             // Devuelve la lista (estará vacía si no se encuentra ninguna)
             return Ok(buscadas);
