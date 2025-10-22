@@ -41,16 +41,16 @@ public class ColaboracionController : ControllerBase
     ///
     /// Ejemplo de response:
     ///
-    /// {
-    ///   "id": "a7b84538-f79e-4fa5-895a-674c0112ec0d",
-    ///   "descripcion": "Cabar el pozo para la pileta",
-    ///   "categoriaColaboracion": 1,
-    ///   "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    ///   "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
-    ///   "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    ///   "organizacionComprometidaId": null,
-    ///   "fechaRealizacion": null
-    /// }
+    ///     {
+    ///         "id": "a7b84538-f79e-4fa5-895a-674c0112ec0d",
+    ///         "descripcion": "Cabar el pozo para la pileta",
+    ///         "categoriaColaboracion": 1,
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
+    ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionComprometidaId": null,
+    ///         "fechaRealizacion": null
+    ///     }
     /// </remarks>
     [HttpPost]
     public async Task<IActionResult> CrearColaboracion(CrearColaboracionDTO colaboracionDTO)
