@@ -17,9 +17,13 @@ public class RespuestaHttp
 public class CrearColaboracionDTO
 {
     /// <summary>
+    /// Nombre del proyecto del que proviene la colaboración.
+    /// </summary>
+    public required string Proyecto { get; set; }
+    /// <summary>
     /// Descripción de la colaboración.
     /// </summary>
-    public required string Descripcion { get; set; } = string.Empty;
+    public required string Descripcion { get; set; }
     /// <summary>
     /// Categoría de la colaboración: Economica = 1, Material = 2, ManoDeObra = 3, Otra = 4
     /// </summary>

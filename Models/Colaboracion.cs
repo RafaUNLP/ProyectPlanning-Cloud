@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,6 +8,7 @@ public class Colaboracion
 {
     [Key] public Guid Id { get; set; }
     public required string Descripcion { get; set; } = string.Empty;
+    [DefaultValue("")]public required string Proyecto { get; set; } = string.Empty; //el nombre, para cuando se auditen las colaboraciones
     public required CategoriaColaboracion CategoriaColaboracion { get; set; }
     public required Guid OrganizacionId { get; set; } //de la que forma parte
     public required Guid ProyectoId { get; set; } //de la que forma parte

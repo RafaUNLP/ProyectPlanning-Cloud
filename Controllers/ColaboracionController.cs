@@ -32,6 +32,7 @@ public class ColaboracionController : ControllerBase
     /// 
     ///     POST /Colaboracion
     ///     {
+    ///         "proyecto": "Pileta municipal en Concordia",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
     ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -43,6 +44,7 @@ public class ColaboracionController : ControllerBase
     ///
     ///     {
     ///         "id": "a7b84538-f79e-4fa5-895a-674c0112ec0d",
+    ///         "proyecto": "Pileta municipal en Concordia",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 1,
     ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -65,6 +67,7 @@ public class ColaboracionController : ControllerBase
             Colaboracion creada = await _colaboracionRepository.AddAsync(new Colaboracion()
             {
                 Id = Guid.NewGuid(),
+                Proyecto = colaboracionDTO.Proyecto,
                 Descripcion = colaboracionDTO.Descripcion,
                 CategoriaColaboracion = colaboracionDTO.CategoriaColaboracion,
                 OrganizacionId = colaboracionDTO.OrganizacionId,
@@ -97,6 +100,7 @@ public class ColaboracionController : ControllerBase
     ///
     ///     {
     ///         "id": "880fc71d-9676-439d-bf07-ef80cdf511b7",
+    ///         "proyecto": "Pileta municipal en Concordia",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
     ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -143,6 +147,7 @@ public class ColaboracionController : ControllerBase
     ///
     ///     {
     ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
+    ///         "proyecto": "Pileta municipal en Concordia",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
     ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -197,6 +202,7 @@ public class ColaboracionController : ControllerBase
     ///     [
     ///       {
     ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
+    ///         "proyecto": "Pileta municipal en Concordia",
     ///         "descripcion": "Cabar el pozo para la pileta",
     ///         "categoriaColaboracion": 2,
     ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
@@ -219,6 +225,54 @@ public class ColaboracionController : ControllerBase
             return Ok(buscadas);
         }
         catch
+        {
+            return StatusCode(500, "Falló la recuperación de las colaboraciones");
+        }
+    }
+
+    /// <summary>
+    /// Recupera todas las colaboraciones filtradas por su estado de ejecución (en ejecución o no).
+    /// </summary>
+    /// <param name="ejecucion">Indica si se desean las colaboraciones en ejecución (true) o realizadas (false).</param>
+    /// <returns>Una lista de colaboraciones según el estado de ejecución.</returns>
+    /// <response code="200">Recuperación exitosa.</response>
+    /// <response code="500">Error del sistema.</response> 
+    /// <remarks>
+    /// Ejemplo de request:
+    /// 
+    ///     GET /Colaboracion?ejecucion=true
+    ///     GET /Colaboracion?ejecucion=false
+    /// 
+    /// Ejemplo de response:
+    /// 
+    ///     [
+    ///       {
+    ///         "id": "f23a945b-5557-4312-bb5a-94eabda06e2d",
+    ///         "proyecto": "Pileta municipal en Concordia",
+    ///         "descripcion": "Cabar el pozo para la pileta",
+    ///         "categoriaColaboracion": 2,
+    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
+    ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///         "organizacionComprometidaId": null,
+    ///         "fechaRealizacion": null
+    ///       }
+    ///     ]
+    /// </remarks>
+    [HttpGet]
+    public async Task<IActionResult> RecuperarColaboracionesPorEjecucion([FromQuery] bool ejecucion)
+    {
+        try
+        {
+            IEnumerable<Colaboracion> buscadas;
+            if (ejecucion)//no pude usar el metodo Realizada() porque LINQ no la traduce a la BD
+                buscadas = await _colaboracionRepository.FilterAsync(c => c.FechaRealizacion == null, orderBy: order => order.OrderByDescending(c => c.Proyecto));
+            else
+                buscadas = await _colaboracionRepository.FilterAsync(c => c.FechaRealizacion != null, orderBy: order => order.OrderByDescending(c => c.Proyecto));
+
+            return Ok(buscadas);
+        }
+        catch (Exception ex)
         {
             return StatusCode(500, "Falló la recuperación de las colaboraciones");
         }
