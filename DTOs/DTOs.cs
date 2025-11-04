@@ -63,3 +63,15 @@ public class UsuarioDTO
     /// </summary>
     public required string Contraseña { get; set; }
 }
+
+public class ObservacionDTO
+{
+    /// <summary>
+    /// Id de la colaboración a la que asociar la observación.
+    /// </summary>
+    public required Guid ColaboracionId { get; set; }
+    /// <summary>
+    /// Descripción de la observación.
+    /// </summary>
+    public required string Descripcion { get; set; }
+}

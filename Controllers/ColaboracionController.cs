@@ -51,7 +51,8 @@ public class ColaboracionController : ControllerBase
     ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
-    ///         "fechaRealizacion": null
+    ///         "fechaRealizacion": null,
+    ///         "observaciones": []
     ///     }
     /// </remarks>
     [HttpPost]
@@ -107,7 +108,8 @@ public class ColaboracionController : ControllerBase
     ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
-    ///         "fechaRealizacion": null
+    ///         "fechaRealizacion": null,
+    ///         "observaciones": []
     ///     }
     /// </remarks>
 
@@ -116,7 +118,7 @@ public class ColaboracionController : ControllerBase
     {
         try
         {
-            Colaboracion? buscado = await _colaboracionRepository.GetAsync(id);
+            Colaboracion? buscado = await _colaboracionRepository.GetAsyncWithIncludes(id, includes: "Observaciones");
 
             if (buscado == null)
                 return NotFound();
@@ -154,7 +156,8 @@ public class ColaboracionController : ControllerBase
     ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    ///         "fechaRealizacion": "2025-10-10T13:27:27.240306"
+    ///         "fechaRealizacion": "2025-10-10T13:27:27.240306",
+    ///         "observaciones": []
     ///     }
     /// </remarks>
     [HttpPatch("{id}")]
@@ -165,7 +168,7 @@ public class ColaboracionController : ControllerBase
             if (!actualizarColaboracionDTO.Realizar && actualizarColaboracionDTO.OrganizacionComprometidaId == null)
                 return Ok(); //si no hay nada que cambiar, no hago nada
 
-            Colaboracion? buscado = await _colaboracionRepository.GetAsync(id);
+            Colaboracion? buscado = await _colaboracionRepository.GetAsyncWithIncludes(id, includes: "Observaciones");
 
             if (buscado == null)
                 return NotFound();
@@ -209,7 +212,8 @@ public class ColaboracionController : ControllerBase
     ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
-    ///         "fechaRealizacion": null
+    ///         "fechaRealizacion": null,
+    ///         "observaciones": []
     ///       }
     ///     ]
     /// </remarks>
@@ -219,7 +223,7 @@ public class ColaboracionController : ControllerBase
         try
         {
             // Se utiliza el método FilterAsync para buscar todas las colaboraciones que coincidan con EtapaId
-            IEnumerable<Colaboracion> buscadas = await _colaboracionRepository.FilterAsync(c => c.ProyectoId == proyectoId);
+            IEnumerable<Colaboracion> buscadas = await _colaboracionRepository.FilterAsync(c => c.ProyectoId == proyectoId, includes: "Observaciones");
 
             // Devuelve la lista (estará vacía si no se encuentra ninguna)
             return Ok(buscadas);
@@ -255,7 +259,8 @@ public class ColaboracionController : ControllerBase
     ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
     ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     ///         "organizacionComprometidaId": null,
-    ///         "fechaRealizacion": null
+    ///         "fechaRealizacion": null,
+    ///         "observaciones": []
     ///       }
     ///     ]
     /// </remarks>
@@ -266,13 +271,13 @@ public class ColaboracionController : ControllerBase
         {
             IEnumerable<Colaboracion> buscadas;
             if (ejecucion)//no pude usar el metodo Realizada() porque LINQ no la traduce a la BD
-                buscadas = await _colaboracionRepository.FilterAsync(c => c.FechaRealizacion == null, orderBy: order => order.OrderByDescending(c => c.Proyecto));
+                buscadas = await _colaboracionRepository.FilterAsync(c => c.FechaRealizacion == null, orderBy: order => order.OrderByDescending(c => c.Proyecto),includes:"Observaciones");
             else
-                buscadas = await _colaboracionRepository.FilterAsync(c => c.FechaRealizacion != null, orderBy: order => order.OrderByDescending(c => c.Proyecto));
+                buscadas = await _colaboracionRepository.FilterAsync(c => c.FechaRealizacion != null, orderBy: order => order.OrderByDescending(c => c.Proyecto),includes:"Observaciones");
 
             return Ok(buscadas);
         }
-        catch (Exception ex)
+        catch
         {
             return StatusCode(500, "Falló la recuperación de las colaboraciones");
         }

@@ -15,6 +15,7 @@ public class Colaboracion
     public required Guid EtapaId { get; set; } //de la que forma parte
     public Guid? OrganizacionComprometidaId { get; set; } //tendrá valor cuando alguien se haga cargo de ella --> NO SABEMOS SI SERÁ UN ID
     [Column(TypeName = "timestamp")] public DateTime? FechaRealizacion { get; set; } //será null si no se realizó
+    public List<Observacion> Observaciones { get; set; } = [];
     public bool Realizada() => this.FechaRealizacion != null;
 }
 public enum CategoriaColaboracion{

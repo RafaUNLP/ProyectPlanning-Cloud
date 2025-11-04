@@ -109,6 +109,7 @@ builder.Services.AddControllersWithViews()
 //Añado los repositorios
 builder.Services.AddScoped<ColaboracionRepository>();
 builder.Services.AddScoped<UsuarioRepository>();
+builder.Services.AddScoped<ObservacionRepository>();
 
 //Añado los servicios
 builder.Services.AddScoped<AuthService>();
