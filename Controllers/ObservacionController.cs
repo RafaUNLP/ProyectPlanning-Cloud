@@ -86,4 +86,51 @@ public class ObservacionController : ControllerBase{
             return StatusCode(500, "Falló la carga de observaciones");
         }
     }
+
+    /// <summary>
+    /// Actualizar la observación para marcarla como realizada.
+    /// </summary>
+    /// <param name="id">Id de la observación.</param>
+    /// <returns>La observación actualizada.</returns>
+    /// <response code="200">Recuperación exitosa.</response>
+    /// <response code="404">Colaboración no encontrada.</response>
+    /// <response code="500">Error del sistema.</response> 
+    /// <remarks>
+    /// Ejemplo de request:
+    /// 
+    ///     PUT /Colaboracion/eyJhbGciOiJIUzI1NiIsInR..."
+    ///
+    /// Ejemplo de response:
+    ///
+    ///     {
+    ///        "Id": "cfcb72c3-2b95-4c76-b27c-0415f5bbd00d",
+    ///        "ColaboracionId": "d2c7f63e-e34f-4701-a029-f8a41012946b",
+    ///        "Descripcion": "Seguramente se requieran más personas de las solicitadas para realizar la colaboración"
+    ///        "FechaCarga": "2025-11-04T12:34:56",
+    ///        "FechaRealizacion": "2025-11-22T08:59:00"
+    ///     }
+    /// </remarks>
+    [HttpPut("{id}")]
+    public async Task<IActionResult> ResolverObservacion(Guid id)
+    {
+        try
+        {
+            Observacion? observacion = await _observacionRepository.GetAsync(id);
+
+            if (observacion == null)
+                return NotFound(observacion);
+
+            if (!observacion.Realizada())
+            {
+                observacion.FechaRealizacion = DateTime.Now;
+                observacion = await _observacionRepository.UpdateAsync(observacion,observacion);
+            }
+
+           return Ok(observacion);
+        }
+        catch
+        {
+            return StatusCode(500, "Falló la carga de observaciones");
+        }
+    }
 }

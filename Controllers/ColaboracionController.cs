@@ -143,7 +143,7 @@ public class ColaboracionController : ControllerBase
     /// <remarks>
     /// Ejemplo de request:
     /// 
-    ///     PATCH /Colaboracion/eyJhbGciOiJIUzI1NiIsInR..."
+    ///     PUT /Colaboracion/eyJhbGciOiJIUzI1NiIsInR..."
     ///
     /// Ejemplo de response:
     ///
@@ -160,7 +160,7 @@ public class ColaboracionController : ControllerBase
     ///         "observaciones": []
     ///     }
     /// </remarks>
-    [HttpPatch("{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> ActualizarColaboracion(Guid id, ActualizarColaboracionDTO actualizarColaboracionDTO)
     {
         try
