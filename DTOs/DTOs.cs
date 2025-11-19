@@ -14,7 +14,7 @@ public class RespuestaHttp
     /// </summary>
     public HttpStatusCode Status { get; set; }
 }
-public class CrearColaboracionDTO
+public class  CrearColaboracionDTO
 {
     /// <summary>
     /// Nombre del proyecto del que proviene la colaboración.
@@ -41,7 +41,7 @@ public class CrearColaboracionDTO
     /// </summary>
     public required Guid OrganizacionProyectoId { get; set; } //de la que forma parte
     public required Guid OrganizacionComprometidaId { get; set;  }
-    public DateTime FechaRealizacion { get; set;  }
+    public DateTime? FechaRealizacion { get; set;  }
 }
 public class ActualizarColaboracionDTO
 {

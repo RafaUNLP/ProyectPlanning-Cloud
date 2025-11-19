@@ -31,13 +31,15 @@ public class ColaboracionController : ControllerBase
     /// Ejemplo de request:
     /// 
     ///     POST /Colaboracion
-    ///     {
-    ///         "proyecto": "Pileta municipal en Concordia",
-    ///         "descripcion": "Cabar el pozo para la pileta",
-    ///         "categoriaColaboracion": 2,
-    ///         "organizacionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    ///         "proyectoId": "5bc63c72-bb1b-467d-9b7b-91476e4a30dd",
-    ///         "etapaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    ///      {
+    ///          "proyecto": "Proyecto 20",
+    ///           "descripcion": "otra colaboracion nueva en la etapa 1",
+    ///           "categoriaColaboracion": 1,
+    ///           "proyectoId": "70161ab3-477d-4902-9959-3caa63d59682",
+    ///           "etapaId": "67cd4cad-84b8-428b-97f8-d69329559b33",
+    ///           "organizacionProyectoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///           "organizacionComprometidaId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    ///           "fechaRealizacion": null
     ///      }
     ///
     /// Ejemplo de response:
