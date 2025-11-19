@@ -22,7 +22,7 @@ public class ColaboracionController : ControllerBase
     /// <summary>
     /// Crea una colaboración.
     /// </summary>
-    /// <param name="colaboracionDTO">Descripción, categoría numética, Id de la etapa a la que pertenece, Id de la organización a la que pertenece</param>
+    /// <param name="colaboracionDTO">Descripción, categoría numérica, Id de la etapa a la que pertenece, Id de la organización a la que pertenece</param>
     /// <returns>La colaboración creada.</returns>
     /// <response code="200">Creación exitosa.</response>
     /// <response code="409">Ya existía una colaboración para esa etapa y esa organización.</response>
@@ -60,7 +60,7 @@ public class ColaboracionController : ControllerBase
     {
         try
         {
-            bool yaExiste = await _colaboracionRepository.Exist(c => c.EtapaId == colaboracionDTO.EtapaId && c.OrganizacionId == colaboracionDTO.OrganizacionId);
+            bool yaExiste = await _colaboracionRepository.Exist(c => c.EtapaId == colaboracionDTO.EtapaId && c.OrganizacionId == colaboracionDTO.OrganizacionProyectoId);
 
             if (yaExiste)
                 return Conflict("La colaboración para esa organización y etapa ya se encuentra cargada");
@@ -71,7 +71,8 @@ public class ColaboracionController : ControllerBase
                 Proyecto = colaboracionDTO.Proyecto,
                 Descripcion = colaboracionDTO.Descripcion,
                 CategoriaColaboracion = colaboracionDTO.CategoriaColaboracion,
-                OrganizacionId = colaboracionDTO.OrganizacionId,
+                OrganizacionId = colaboracionDTO.OrganizacionProyectoId,
+                OrganizacionComprometidaId = colaboracionDTO.OrganizacionComprometidaId,
                 ProyectoId = colaboracionDTO.ProyectoId,
                 EtapaId = colaboracionDTO.EtapaId
             });
@@ -137,7 +138,7 @@ public class ColaboracionController : ControllerBase
     /// <param name="id">Id de la colaboración.</param>
     /// <param name="actualizarColaboracionDTO">Id de la organización que desea comprometerse con ella, indicador de si se desea marcar la colaboración como realizada</param>
     /// <returns>La colaboración actualizada.</returns>
-    /// <response code="200">Recuperación exitosa.</response>
+    /// <response code="200">Actualización exitosa.</response>
     /// <response code="404">Colaboración no encontrada.</response>
     /// <response code="500">Error del sistema.</response> 
     /// <remarks>
@@ -172,8 +173,6 @@ public class ColaboracionController : ControllerBase
 
             if (buscado == null)
                 return NotFound();
-
-            buscado.OrganizacionComprometidaId ??= actualizarColaboracionDTO.OrganizacionComprometidaId; //sólo asigna si estaba en null
 
             if (actualizarColaboracionDTO.Realizar)
                 buscado.FechaRealizacion ??= DateTime.Now; //sólo asigna si estaba en null

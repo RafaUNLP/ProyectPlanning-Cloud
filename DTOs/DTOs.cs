@@ -39,7 +39,9 @@ public class CrearColaboracionDTO
     /// <summary>
     /// Id de la organización a la que pertenece la colaboración.
     /// </summary>
-    public required Guid OrganizacionId { get; set; } //de la que forma parte
+    public required Guid OrganizacionProyectoId { get; set; } //de la que forma parte
+    public required Guid OrganizacionComprometidaId { get; set;  }
+    public DateTime FechaRealizacion { get; set;  }
 }
 public class ActualizarColaboracionDTO
 {
