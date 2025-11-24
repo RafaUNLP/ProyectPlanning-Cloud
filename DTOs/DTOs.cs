@@ -39,8 +39,8 @@ public class  CrearColaboracionDTO
     /// <summary>
     /// Id de la organización a la que pertenece la colaboración.
     /// </summary>
-    public required Guid OrganizacionProyectoId { get; set; } //de la que forma parte
-    public required Guid OrganizacionComprometidaId { get; set;  }
+    public required long OrganizacionProyectoId { get; set; } //de la que forma parte
+    public required long OrganizacionComprometidaId { get; set;  }
     public DateTime? FechaRealizacion { get; set;  }
 }
 public class ActualizarColaboracionDTO
@@ -48,7 +48,7 @@ public class ActualizarColaboracionDTO
     /// <summary>
     /// Id de la organización que se compromete a realizar la colaboración.
     /// </summary>
-    public Guid? OrganizacionComprometidaId { get; set; }
+    public long? OrganizacionComprometidaId { get; set; }
     /// <summary>
     /// Si se desea marcar la colaboración como realizada o no.
     /// </summary>
