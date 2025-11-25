@@ -81,9 +81,9 @@ public class ColaboracionController : ControllerBase
 
             return Ok(creada);
         }
-        catch
+        catch (Exception ex)
         {
-            return StatusCode(500, "Falló la carga de la colaboración");
+            return StatusCode(500, $"Falló la carga de la colaboración: {ex.Message}");
         }
     }
 
